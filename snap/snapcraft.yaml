@@ -1,0 +1,64 @@
+name: kiwix-desktop
+base: core18 # the base snap is the execution environment for this snap
+adopt-info: kiwix-desktop
+summary: Viewer/manager of ZIM files for GNU/Linux
+description: |
+  Viewer/manager of ZIM files for GNU/Linux
+
+grade: stable
+confinement: strict
+
+parts:
+  kiwix-desktop:
+    after: [kiwix-lib, mustache, libzim]
+    plugin: qmake
+    source: https://github.com/kiwix/kiwix-desktop.git
+    source-tag: "2.0-rc4" # build current latest build
+    build-packages:
+      - pkg-config
+      - libqt5gui5
+      - qtbase5-dev
+      - qtwebengine5-dev
+      - libqt5svg5-dev
+      - qt5-image-formats-plugins
+      - qt5-default
+      - aria2
+      - qttools5-dev-tools
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version $(git describe --tags)
+  kiwix-lib:
+    after: [mustache,libzim]
+    plugin: meson
+    source: https://github.com/kiwix/kiwix-lib.git
+    source-tag: "8.2.2" # build current latest stable build
+    build-packages:
+      - libicu-dev
+      #- libzim-dev # not new enough for kiwix-lib
+      - libpugixml-dev
+      - liblzma-dev
+      - aria2
+      - cmake
+      - libxapian-dev
+    stage-packages:
+      #- libzim2 # not new enough for kiwix-lib
+      - liblzma5
+  mustache:
+    plugin: dump
+    source: https://github.com/kainjow/Mustache.git
+    source-tag: "v4.0" # use current latest stable build
+    override-pull: |
+      snapcraftctl pull
+      mkdir -p $SNAPCRAFT_STAGE/include/mustache
+      cp mustache.hpp $SNAPCRAFT_STAGE/include/mustache
+  libzim:
+    plugin: meson
+    source: https://github.com/openzim/libzim.git
+    source-tag: "5.1.0"
+    build-packages:
+      - zlib1g-dev
+      - lzma-dev
+      - libicu-dev
+      - libxapian-dev
+      - googletest
+      - cython3
