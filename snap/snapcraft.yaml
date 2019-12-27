@@ -8,9 +8,24 @@ description: |
 grade: stable
 confinement: strict
 
+apps:
+  kiwix-desktop:
+    command: desktop-launch $SNAP/usr/local/bin/kiwix-desktop
+    environment:
+      LD_LIBRARY_PATH: "$SNAP/usr/local/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
+    plugs:
+      - desktop
+      - desktop-legacy
+      - x11 
+      - opengl
+      - pulseaudio
+      - home
+      - network
+      - network-bind
+
 parts:
   kiwix-desktop:
-    after: [kiwix-lib, mustache, libzim]
+    after: [kiwix-lib, mustache, libzim, googletest]
     plugin: qmake
     source: https://github.com/kiwix/kiwix-desktop.git
     source-tag: "2.0-rc4" # build current latest build
@@ -24,41 +39,195 @@ parts:
       - qt5-default
       - aria2
       - qttools5-dev-tools
+    stage-packages:
+      - libasound2
+      - libavcodec57
+      - libavformat57
+      - libavutil55
+      - libbluray2
+      - libcairo2
+      - libchromaprint1
+      - libcroco3
+      - libcrystalhd3
+      - libdatrie1
+      - libdouble-conversion1
+      - libdrm2
+      - libevent-2.1-6
+      - libfontconfig1
+      - libfreetype6
+      - libgdk-pixbuf2.0-0
+      - libgl1
+      - libglvnd0
+      - libglx0
+      - libgme0
+      - libgomp1
+      - libgraphite2-3
+      - libgsm1
+      - libharfbuzz0b
+      - libicu60
+      - libjpeg-turbo8
+      - liblcms2-2
+      - libminizip1
+      - libmp3lame0
+      - libmpg123-0
+      - libnspr4
+      - libnss3
+      - libnuma1
+      - libogg0
+      - libopenjp2-7
+      - libopenmpt0
+      - libopus0
+      - libpango-1.0-0
+      - libpangocairo-1.0-0
+      - libpangoft2-1.0-0
+      - libpixman-1-0
+      - libpng16-16
+      - libqt5core5a
+      - libqt5gui5
+      - libqt5network5
+      - libqt5positioning5
+      - libqt5printsupport5
+      - libqt5qml5
+      - libqt5quick5
+      - libqt5quickwidgets5
+      - libqt5webchannel5
+      - libqt5webenginecore5
+      - libqt5webenginewidgets5
+      - libqt5widgets5
+      - libre2-4
+      - librsvg2-2
+      - libshine3
+      - libsnappy1v5
+      - libsoxr0
+      - libspeex1
+      - libssh-gcrypt-4
+      - libswresample2
+      - libthai0
+      - libtheora0
+      - libtwolame0
+      - libva-drm2
+      - libva-x11-2
+      - libva2
+      - libvdpau1
+      - libvorbis0a
+      - libvorbisenc2
+      - libvorbisfile3
+      - libvpx5
+      - libwavpack1
+      - libwebp6
+      - libwebpdemux2
+      - libwebpmux3
+      - libx11-6
+      - libx11-xcb1
+      - libx264-152
+      - libx265-146
+      - libxau6
+      - libxcb-render0
+      - libxcb-shm0
+      - libxcb1
+      - libxcomposite1
+      - libxcursor1
+      - libxdamage1
+      - libxdmcp6
+      - libxext6
+      - libxfixes3
+      - libxi6
+      - libxml2
+      - libxrender1
+      - libxslt1.1
+      - libxss1
+      - libxtst6
+      - libxvidcore4
+      - libzvbi0
     override-pull: |
       snapcraftctl pull
       snapcraftctl set-version $(git describe --tags)
   kiwix-lib:
-    after: [mustache,libzim]
+    after: [mustache,libzim,googletest]
     plugin: meson
     source: https://github.com/kiwix/kiwix-lib.git
     source-tag: "8.2.2" # build current latest stable build
     build-packages:
       - libicu-dev
-      #- libzim-dev # not new enough for kiwix-lib
       - libpugixml-dev
       - liblzma-dev
       - aria2
       - cmake
       - libxapian-dev
+      - libcurl4-openssl-dev
+      - libmicrohttpd-dev
     stage-packages:
-      #- libzim2 # not new enough for kiwix-lib
-      - liblzma5
+      - libasn1-8-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+      - libcurl4                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+      - libgssapi3-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+      - libhcrypto4-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      - libheimbase1-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      - libheimntlm0-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      - libhx509-5-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+      - libicu60                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+      - libkrb5-26-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+      - libldap-2.4-2                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      - libmicrohttpd12                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      - libnghttp2-14                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      - libpsl5                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+      - libpugixml1v5                                                                                                    
+      - libroken18-heimdal                                                                                               
+      - librtmp1                                                                                                         
+      - libsasl2-2                                                                                                       
+      - libwind0-heimdal  
   mustache:
     plugin: dump
     source: https://github.com/kainjow/Mustache.git
     source-tag: "v4.0" # use current latest stable build
     override-pull: |
       snapcraftctl pull
-      mkdir -p $SNAPCRAFT_STAGE/include/mustache
-      cp mustache.hpp $SNAPCRAFT_STAGE/include/mustache
+      mkdir -p $SNAPCRAFT_STAGE/include
+      cp mustache.hpp $SNAPCRAFT_STAGE/include
   libzim:
+    after: [googletest]
     plugin: meson
     source: https://github.com/openzim/libzim.git
-    source-tag: "5.1.0"
+    source-tag: "6.0.2"
+    stage-packages:
+      - libicu60                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+      - libxapian30  
     build-packages:
       - zlib1g-dev
       - lzma-dev
       - libicu-dev
       - libxapian-dev
-      - googletest
       - cython3
+  googletest: # so we don't use old buggy googletest in the archive, saves patching libzim tests
+    source-tag: "release-1.10.0"
+    source: https://github.com/google/googletest.git
+    plugin: cmake
+    prime:
+      - -include/gtest
+      - -lib/libgtest*
+      - -lib/pkgconfig/gtest*
+  desktop-qt5:
+    build-packages:
+      - build-essential
+      - qtbase5-dev
+      - dpkg-dev
+    make-parameters:
+      - FLAVOR=qt5
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5
+      - try:
+        - appmenu-qt5
+      - locales-all
+      - xdg-user-dirs
+      - fcitx-frontend-qt5
