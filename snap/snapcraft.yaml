@@ -8,14 +8,21 @@ description: |
 grade: stable
 confinement: strict
 
+layout:
+    /usr/share/qt5:
+        bind: $SNAP/usr/share/qt5
+
 apps:
   kiwix-desktop:
-    command: desktop-launch $SNAP/usr/local/bin/kiwix-desktop
+    #build-attributes: [keep-execstack]
+    command: desktop-launch $SNAP/bin/snapcraft-preload $SNAP/usr/local/bin/kiwix-desktop
     environment:
+      DEBUG: 1
       LD_LIBRARY_PATH: "$SNAP/usr/local/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
     plugs:
       - desktop
       - desktop-legacy
+      - browser-support
       - x11 
       - opengl
       - pulseaudio
@@ -31,15 +38,16 @@ parts:
     source-tag: "2.0-rc4" # build current latest build
     build-packages:
       - pkg-config
-      - libqt5gui5
       - qtbase5-dev
       - qtwebengine5-dev
       - libqt5svg5-dev
-      - qt5-image-formats-plugins
-      - qt5-default
-      - aria2
       - qttools5-dev-tools
     stage-packages:
+      - libgtk2.0-0
+      - qt5-image-formats-plugins
+      - libqt5gui5
+      - qt5-default
+      - aria2
       - libasound2
       - libavcodec57
       - libavformat57
@@ -83,7 +91,6 @@ parts:
       - libpixman-1-0
       - libpng16-16
       - libqt5core5a
-      - libqt5gui5
       - libqt5network5
       - libqt5positioning5
       - libqt5printsupport5
@@ -157,23 +164,23 @@ parts:
       - libcurl4-openssl-dev
       - libmicrohttpd-dev
     stage-packages:
-      - libasn1-8-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-      - libcurl4                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-      - libgssapi3-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-      - libhcrypto4-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-      - libheimbase1-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-      - libheimntlm0-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-      - libhx509-5-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-      - libicu60                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-      - libkrb5-26-heimdal                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-      - libldap-2.4-2                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-      - libmicrohttpd12                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-      - libnghttp2-14                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-      - libpsl5                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-      - libpugixml1v5                                                                                                    
-      - libroken18-heimdal                                                                                               
-      - librtmp1                                                                                                         
-      - libsasl2-2                                                                                                       
+      - libasn1-8-heimdal
+      - libcurl4
+      - libgssapi3-heimdal
+      - libhcrypto4-heimdal
+      - libheimbase1-heimdal
+      - libheimntlm0-heimdal
+      - libhx509-5-heimdal
+      - libicu60   
+      - libkrb5-26-heimdal
+      - libldap-2.4-2
+      - libmicrohttpd12
+      - libnghttp2-14
+      - libpsl5
+      - libpugixml1v5
+      - libroken18-heimdal
+      - librtmp1
+      - libsasl2-2   
       - libwind0-heimdal  
   mustache:
     plugin: dump
@@ -189,7 +196,7 @@ parts:
     source: https://github.com/openzim/libzim.git
     source-tag: "6.0.2"
     stage-packages:
-      - libicu60                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+      - libicu60   
       - libxapian30  
     build-packages:
       - zlib1g-dev
