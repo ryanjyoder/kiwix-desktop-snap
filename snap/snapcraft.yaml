@@ -55,7 +55,8 @@ parts:
       - libcairo2
       - libchromaprint1
       - libcroco3
-      - libcrystalhd3
+      - try:
+        - libcrystalhd3
       - libdatrie1
       - libdouble-conversion1
       - libdrm2
